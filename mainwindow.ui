@@ -29,7 +29,7 @@
     </property>
     <widget class="QMenu" name="menuAbout">
      <property name="title">
-      <string>About</string>
+      <string>关于</string>
      </property>
      <addaction name="actionViolet956_Copyright_All_Rights_Reserved"/>
     </widget>
@@ -39,18 +39,18 @@
    </widget>
    <widget class="QMenu" name="menuMy">
     <property name="title">
-     <string>My</string>
+     <string>我</string>
     </property>
     <addaction name="actionSign_in"/>
     <addaction name="actionSign_out"/>
    </widget>
    <widget class="QMenu" name="menuFiles">
     <property name="title">
-     <string>Files</string>
+     <string>文件</string>
     </property>
     <widget class="QMenu" name="menuChat_Record">
      <property name="title">
-      <string>Chat Record</string>
+      <string>聊天记录</string>
      </property>
      <addaction name="actionDownload"/>
     </widget>
@@ -66,9 +66,17 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>帮助</string>
     </property>
-    <addaction name="actionSystem_Information"/>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>版本信息</string>
+     </property>
+     <addaction name="actionV0_0_1"/>
+    </widget>
+    <addaction name="menu"/>
+    <addaction name="actionhave_bug"/>
+    <addaction name="actionProject_address"/>
    </widget>
    <addaction name="menuChat"/>
    <addaction name="menuMy"/>
@@ -86,12 +94,12 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionUpdate">
    <property name="text">
-    <string>Update</string>
+    <string>查看更新</string>
    </property>
   </action>
   <action name="actionSign_in">
    <property name="text">
-    <string>Sign in</string>
+    <string>登录</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -99,7 +107,7 @@
   </action>
   <action name="actionSign_out">
    <property name="text">
-    <string>Sign out</string>
+    <string>登出</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -107,12 +115,12 @@
   </action>
   <action name="actionViolet956_Copyright_All_Rights_Reserved">
    <property name="text">
-    <string>Violet956 Copyright All Rights Reserved</string>
+    <string>Violet956设计开发</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>退出</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
@@ -120,7 +128,7 @@
   </action>
   <action name="actionDownload">
    <property name="text">
-    <string>Download</string>
+    <string>下载</string>
    </property>
   </action>
   <action name="actionTo_Server">
@@ -133,12 +141,19 @@
     <string>To User</string>
    </property>
   </action>
-  <action name="actionSystem_Information">
+  <action name="actionV0_0_1">
    <property name="text">
-    <string>System Information</string>
+    <string>V0.0.1</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+H</string>
+  </action>
+  <action name="actionProject_address">
+   <property name="text">
+    <string>项目地址</string>
+   </property>
+  </action>
+  <action name="actionhave_bug">
+   <property name="text">
+    <string>报告Bug</string>
    </property>
   </action>
  </widget>

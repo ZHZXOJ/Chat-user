@@ -56,7 +56,7 @@
     </widget>
     <widget class="QMenu" name="menuUpload">
      <property name="title">
-      <string>Upload</string>
+      <string>上传</string>
      </property>
      <addaction name="actionTo_Server"/>
      <addaction name="actionTo_User"/>
@@ -133,12 +133,12 @@
   </action>
   <action name="actionTo_Server">
    <property name="text">
-    <string>To Server</string>
+    <string>到服务器</string>
    </property>
   </action>
   <action name="actionTo_User">
    <property name="text">
-    <string>To User</string>
+    <string>到用户</string>
    </property>
   </action>
   <action name="actionV0_0_1">

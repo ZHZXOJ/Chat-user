@@ -15,6 +15,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_actionExit_triggered();
+
+    void on_actionSign_in_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

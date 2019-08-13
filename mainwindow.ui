@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>0</y>
-      <width>16</width>
-      <height>261</height>
+      <y>20</y>
+      <width>20</width>
+      <height>241</height>
      </rect>
     </property>
     <property name="orientation">
@@ -78,9 +78,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
+      <y>20</y>
       <width>531</width>
-      <height>291</height>
+      <height>271</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4" stretch="10,1">
@@ -110,6 +110,19 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>521</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>请先登录</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -263,7 +276,10 @@
   </action>
   <action name="actionsetting">
    <property name="text">
-    <string>个性化</string>
+    <string>设置</string>
+   </property>
+   <property name="toolTip">
+    <string>设置</string>
    </property>
   </action>
   <action name="actiondelet">

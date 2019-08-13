@@ -21,9 +21,17 @@ private slots:
 
     void on_actionSign_in_triggered();
 
+    void on_actionSign_out_triggered();
+
+public slots:
+    void onReadReady();
+    void onConnected();
+    void onDisconnected();
+    void onError(QAbstractSocket::SocketError socketError);
+
 private:
     Ui::MainWindow *ui;
-
+    QTcpSocket tcpSocket;
 };
 
 #endif // MAINWINDOW_H

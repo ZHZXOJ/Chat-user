@@ -25,17 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        alreadylogin.cpp \
         login.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        usernameerror.cpp
 
 HEADERS += \
+        alreadylogin.h \
         login.h \
-        mainwindow.h
+        mainwindow.h \
+        usernameerror.h
 
 FORMS += \
+        alreadylogin.ui \
         login.ui \
-        mainwindow.ui
+        mainwindow.ui \
+        usernameerror.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

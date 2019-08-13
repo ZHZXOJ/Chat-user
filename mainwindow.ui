@@ -27,7 +27,7 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>560</x>
@@ -74,7 +74,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -162,6 +162,7 @@
     </widget>
     <addaction name="menuChat_Record"/>
     <addaction name="menuUpload"/>
+    <addaction name="actiondelet"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -187,7 +188,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <action name="actionUpdate">
@@ -263,6 +264,14 @@
   <action name="actionsetting">
    <property name="text">
     <string>个性化</string>
+   </property>
+  </action>
+  <action name="actiondelet">
+   <property name="text">
+    <string>清除缓存</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+D</string>
    </property>
   </action>
  </widget>

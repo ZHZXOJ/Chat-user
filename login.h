@@ -2,6 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include <QTcpSocket>
 
 namespace Ui {
 class Dialog;

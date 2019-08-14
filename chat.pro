@@ -29,18 +29,21 @@ SOURCES += \
         login.cpp \
         main.cpp \
         mainwindow.cpp \
+        setip.cpp \
         usernameerror.cpp
 
 HEADERS += \
         alreadylogin.h \
         login.h \
         mainwindow.h \
+        setip.h \
         usernameerror.h
 
 FORMS += \
         alreadylogin.ui \
         login.ui \
         mainwindow.ui \
+        setip.ui \
         usernameerror.ui
 
 # Default rules for deployment.

@@ -6,7 +6,7 @@
 #include <QDebug>
 
 extern QString username;
-int logout;
+bool logout;
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -51,6 +51,8 @@ void Dialog::on_pushButton_clicked()
             qDebug() << logout << "QAQ" << username;
         }
         Dialog::close();
+        logout=0;
+        return;
     }
 
     username=lsname;

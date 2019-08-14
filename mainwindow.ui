@@ -147,6 +147,7 @@
     <addaction name="actionUpdate"/>
     <addaction name="menuAbout"/>
     <addaction name="actionExit"/>
+    <addaction name="actionconnecting"/>
    </widget>
    <widget class="QMenu" name="menuMy">
     <property name="title">
@@ -281,6 +282,9 @@
    <property name="toolTip">
     <string>设置</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
   </action>
   <action name="actiondelet">
    <property name="text">
@@ -288,6 +292,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+D</string>
+   </property>
+  </action>
+  <action name="actionconnecting">
+   <property name="text">
+    <string>重新连接</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+R</string>
    </property>
   </action>
  </widget>

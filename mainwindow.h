@@ -23,6 +23,10 @@ private slots:
 
     void on_actionSign_out_triggered();
 
+    void on_actionsetting_triggered();
+
+    void on_actionconnecting_triggered();
+
 public slots:
     void onReadReady();
     void onConnected();

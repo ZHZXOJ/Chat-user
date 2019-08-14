@@ -62,6 +62,9 @@ void MainWindow::onReadReady()
     QObject *obj = this->sender();
     QTcpSocket *socket = qobject_cast<QTcpSocket*>(obj);
     QByteArray data = socket ->readAll();
+
+    ui->textEdit->append(data);
+
     qDebug() << "read:" << data;
 }
 
@@ -112,4 +115,27 @@ void MainWindow::on_actionsetting_triggered()
 void MainWindow::on_actionconnecting_triggered()
 {
     tcpSocket.connectToHost(ServerIP,8888);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    if(username=="")
+    {
+        Dialog a;
+        a.exec();
+        if(username=="")
+        {
+            ui->label_7->setText("您还没有登录，请先登录QAQ");
+        }
+        else
+        {
+            ui->label_7->setText("您好"+username+"欢迎使用Chat");
+        }
+        return;
+    }
+    if(ui->label->text()!="连接成功"+ServerIP)
+    {
+        ui->label->setText("请尝试重新连接");
+        return;
+    }
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
+#include <QList>
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,8 @@ private slots:
     void on_actionsetting_triggered();
 
     void on_actionconnecting_triggered();
+
+    void on_pushButton_clicked();
 
 public slots:
     void onReadReady();

@@ -43,3 +43,8 @@ void setIP::on_pushButton_clicked()
     ServerIP=lsIP;
     setIP::close();
 }
+
+void setIP::on_pushButton_2_clicked()
+{
+    setIP::close();
+}

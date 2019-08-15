@@ -5,6 +5,8 @@
 #include <login.h>
 #include <setip.h>
 #include <QDebug>
+#include <QFileDialog>
+#include <QFile>
 
 QString username;
 QString ServerIP="127.0.0.1";
@@ -33,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&tcpSocket,SIGNAL(error(QAbstractSocket::SocketError)),
             this,SLOT(onError(QAbstractSocket::SocketError)));
 
+    imageIndex = 0;
     tcpSocket.connectToHost(ServerIP,8888);
 
 }
@@ -63,7 +66,25 @@ void MainWindow::onReadReady()
     QTcpSocket *socket = qobject_cast<QTcpSocket*>(obj);
     QByteArray data = socket ->readAll();
 
-    ui->textEdit->append(data);
+    QString pre = data.mid(0,4);
+    if(pre == "TXT:")
+        ui->textEdit->append(data.mid(4));
+    else if (pre == "IMG:")
+    {
+        QString htmlTag = QString("<img src=\"%1\"></img>");
+        QString index = QString::number(imageIndex);
+        htmlTag = htmlTag.arg(index + ".png");
+
+        QFile file(index + ".png");
+        file.open(QIODevice::WriteOnly);
+        file.write(data.mid(4));
+        file.close();
+
+        imageIndex++;
+
+        ui->textEdit->insertHtml(htmlTag);
+    }
+
 
     qDebug() << "read:" << data;
 }
@@ -107,14 +128,17 @@ void MainWindow::on_actionSign_out_triggered()
 
 void MainWindow::on_actionsetting_triggered()
 {
+    QString TMP=ServerIP;
     setIP a;
     a.exec();
-    tcpSocket.connectToHost(ServerIP,8888);
+    if(TMP!=ServerIP)
+        tcpSocket.connectToHost(ServerIP,8888);
 }
 
 void MainWindow::on_actionconnecting_triggered()
 {
-    tcpSocket.connectToHost(ServerIP,8888);
+    if(ui->label->text()!="连接成功"+ServerIP)
+        tcpSocket.connectToHost(ServerIP,8888);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -137,5 +161,32 @@ void MainWindow::on_pushButton_clicked()
     {
         ui->label->setText("请尝试重新连接");
         return;
+    }
+    QString msgInput = ui->lineEdit->text();
+    msgInput = "TXT:"+username+":\n"+msgInput;
+    tcpSocket.write(msgInput.toLocal8Bit());
+}
+
+void MainWindow::on_actionTo_User_triggered()
+{
+    QString image = QFileDialog::getOpenFileName(this,"选择一个图片文件",".","Image Files (*.gif *.png *.jpg *.bmp)");
+    if(image.isEmpty())
+        return;
+    QFile file(image);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = file.readAll();
+    file.close();
+    tcpSocket.write("IMG:"+data);
+}
+
+void MainWindow::on_actiondelet_triggered()
+{
+    if(imageIndex==0)
+        return;
+    else for (int i=0;i<imageIndex;++i)
+    {
+        QString IMG = QString::number(imageIndex) + ".png";
+        QFile TMP(IMG);
+        TMP.remove();
     }
 }

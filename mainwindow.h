@@ -30,6 +30,10 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_actionTo_User_triggered();
+
+    void on_actiondelet_triggered();
+
 public slots:
     void onReadReady();
     void onConnected();
@@ -39,6 +43,8 @@ public slots:
 private:
     Ui::MainWindow *ui;
     QTcpSocket tcpSocket;
+
+    int imageIndex;
 };
 
 #endif // MAINWINDOW_H

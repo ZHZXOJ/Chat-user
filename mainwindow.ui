@@ -198,7 +198,10 @@
   </widget>
   <action name="actionUpdate">
    <property name="text">
-    <string>查看更新</string>
+    <string>更新列表</string>
+   </property>
+   <property name="toolTip">
+    <string>更新列表</string>
    </property>
   </action>
   <action name="actionSign_in">
@@ -245,10 +248,16 @@
    <property name="text">
     <string>到服务器</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
   </action>
   <action name="actionTo_User">
    <property name="text">
     <string>到用户</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+U</string>
    </property>
   </action>
   <action name="actionV0_0_1">

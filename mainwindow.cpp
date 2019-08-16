@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QFile>
+#include <QDataStream>
 
 QString username;
 QString ServerIP="127.0.0.1";
@@ -47,6 +48,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionSign_in_triggered()
 {
+    if(ui->label->text()!="连接成功"+ServerIP)
+        return;
     Dialog a;
     a.exec();
     if(username=="")
@@ -64,29 +67,50 @@ void MainWindow::onReadReady()
 {
     QObject *obj = this->sender();
     QTcpSocket *socket = qobject_cast<QTcpSocket*>(obj);
-    QByteArray data = socket ->readAll();
 
-    QString pre = data.mid(0,4);
-    if(pre == "TXT:")
-        ui->textEdit->append(data.mid(4));
-    else if (pre == "IMG:")
-    {
-        QString htmlTag = QString("<img src=\"%1\"></img>");
-        QString index = QString::number(imageIndex);
-        htmlTag = htmlTag.arg(index + ".png");
+    quint64 sizeNow =0;
+    //已发送
+    do{
+        sizeNow = socket->bytesAvailable();
+        if(sizeNow < sizeof (quint32))
+        {
+            return;
+        }
 
-        QFile file(index + ".png");
-        file.open(QIODevice::WriteOnly);
-        file.write(data.mid(4));
-        file.close();
+        QDataStream stream(socket);
+        quint32 sizePack = 0;
+        stream >> sizePack;
+        if(sizeNow >= sizePack - 4)
+        {
+            qDebug()<<"full pack";
+            QByteArray dataFull;
+            stream >> dataFull;
+            //剩下的字节
+            sizeNow = socket->bytesAvailable();
 
-        imageIndex++;
+            QString pre = dataFull.mid(0,4);
+            if(pre == "TXT:")
+                ui->textEdit->append(dataFull.mid(4));
+            else if (pre == "IMG:")
+            {
+                QString htmlTag = QString("<img src=\"%1\"></img>");
+                QString index = QString::number(imageIndex);
+                htmlTag = htmlTag.arg(index + ".png");
 
-        ui->textEdit->insertHtml(htmlTag);
-    }
+                QFile file(index + ".png");
+                file.open(QIODevice::WriteOnly);
+                file.write(dataFull.mid(4));
+                file.close();
+
+                imageIndex++;
+
+                ui->textEdit->insertHtml(htmlTag);
+            }
 
 
-    qDebug() << "read:" << data;
+            qDebug() << "read:" << dataFull;
+        }
+    }while(sizeNow > 0);
 }
 
 void MainWindow::onConnected()
@@ -163,20 +187,52 @@ void MainWindow::on_pushButton_clicked()
         return;
     }
     QString msgInput = ui->lineEdit->text();
+
     msgInput = "TXT:"+username+":\n"+msgInput;
-    tcpSocket.write(msgInput.toLocal8Bit());
+
+    QByteArray dataSend;
+
+    QDataStream stream(&dataSend,QIODevice::WriteOnly);
+    stream<<(quint32)0<<msgInput.toLocal8Bit();
+    stream.device()->seek(0);
+    stream<<dataSend.size();
+
+    tcpSocket.write(dataSend);
 }
 
 void MainWindow::on_actionTo_User_triggered()
 {
+    if(username=="")
+    {
+        Dialog a;
+        a.exec();
+        if(username=="")
+        {
+            ui->label_7->setText("您还没有登录，请先登录QAQ");
+        }
+        else
+        {
+            ui->label_7->setText("您好"+username+"欢迎使用Chat");
+        }
+        return;
+    }
     QString image = QFileDialog::getOpenFileName(this,"选择一个图片文件",".","Image Files (*.gif *.png *.jpg *.bmp)");
     if(image.isEmpty())
         return;
     QFile file(image);
     file.open(QIODevice::ReadOnly);
-    QByteArray data = file.readAll();
+    QByteArray data = "IMG" + file.readAll();
     file.close();
-    tcpSocket.write("IMG:"+data);
+
+    //封装
+    QByteArray dataSend;
+
+    QDataStream stream(&dataSend,QIODevice::WriteOnly);
+    stream << (quint32)0 << data;
+    stream.device()->seek(0);
+    stream << dataSend.size();
+
+    tcpSocket.write(dataSend);
 }
 
 void MainWindow::on_actiondelet_triggered()

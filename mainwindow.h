@@ -45,6 +45,8 @@ private:
     QTcpSocket tcpSocket;
 
     int imageIndex;
+
+    quint32 sizePackLast;
 };
 
 #endif // MAINWINDOW_H

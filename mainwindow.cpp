@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this,SLOT(onError(QAbstractSocket::SocketError)));
 
     imageIndex = 0;
+    sizePackLast = 0;
+
     tcpSocket.connectToHost(ServerIP,8888);
 
 }
@@ -68,46 +70,49 @@ void MainWindow::onReadReady()
     QObject *obj = this->sender();
     QTcpSocket *socket = qobject_cast<QTcpSocket*>(obj);
 
-    quint64 sizeNow =0;
+    quint64 sizeNow =0 ;
     //已发送
     do{
         sizeNow = socket->bytesAvailable();
-        if(sizeNow < sizeof (quint32))
+        QDataStream stream(socket);
+
+        if(sizePackLast == 0)
+        {
+            if(sizeNow < sizeof (quint32))
+            {
+                return;
+            }
+
+            stream >> sizePackLast;
+        }
+
+        if(sizeNow < sizePackLast - 4)
         {
             return;
         }
-
-        QDataStream stream(socket);
-        quint32 sizePack = 0;
-        stream >> sizePack;
-        if(sizeNow >= sizePack - 4)
+        qDebug()<<"full pack";
+        QByteArray dataFull;
+        stream >> dataFull;
+        //剩下的字节
+        sizeNow = socket->bytesAvailable();
+        qDebug()<<dataFull;
+        QString pre = dataFull.mid(0,4);
+        if(pre == "TXT:")
+            ui->textEdit->insertPlainText(dataFull.mid(4));
+        else if (pre == "IMG:")
         {
-            qDebug()<<"full pack";
-            QByteArray dataFull;
-            stream >> dataFull;
-            //剩下的字节
-            sizeNow = socket->bytesAvailable();
+            QString htmlTag = QString("<img src=\"%1\"></img>");
+            QString index = QString::number(imageIndex);
+            htmlTag = htmlTag.arg(index + ".png");
 
-            QString pre = dataFull.mid(0,4);
-            if(pre == "TXT:")
-                ui->textEdit->append(dataFull.mid(4));
-            else if (pre == "IMG:")
-            {
-                QString htmlTag = QString("<img src=\"%1\"></img>");
-                QString index = QString::number(imageIndex);
-                htmlTag = htmlTag.arg(index + ".png");
+            QFile file(index + ".png");
+            file.open(QIODevice::WriteOnly);
+            file.write(dataFull.mid(4));
+            file.close();
 
-                QFile file(index + ".png");
-                file.open(QIODevice::WriteOnly);
-                file.write(dataFull.mid(4));
-                file.close();
+            imageIndex++;
 
-                imageIndex++;
-
-                ui->textEdit->insertHtml(htmlTag);
-            }
-
-
+            ui->textEdit->insertHtml(htmlTag);
             qDebug() << "read:" << dataFull;
         }
     }while(sizeNow > 0);
@@ -198,6 +203,8 @@ void MainWindow::on_pushButton_clicked()
     stream<<dataSend.size();
 
     tcpSocket.write(dataSend);
+
+    qDebug()<<dataSend;
 }
 
 void MainWindow::on_actionTo_User_triggered()
@@ -219,9 +226,10 @@ void MainWindow::on_actionTo_User_triggered()
     QString image = QFileDialog::getOpenFileName(this,"选择一个图片文件",".","Image Files (*.gif *.png *.jpg *.bmp)");
     if(image.isEmpty())
         return;
+    qDebug()<<image;
     QFile file(image);
     file.open(QIODevice::ReadOnly);
-    QByteArray data = "IMG" + file.readAll();
+    QByteArray data = "IMG:" + file.readAll();
     file.close();
 
     //封装
@@ -233,16 +241,18 @@ void MainWindow::on_actionTo_User_triggered()
     stream << dataSend.size();
 
     tcpSocket.write(dataSend);
+
+    qDebug()<<dataSend;
 }
 
 void MainWindow::on_actiondelet_triggered()
 {
-    if(imageIndex==0)
+    /*if(imageIndex==0)
         return;
     else for (int i=0;i<imageIndex;++i)
     {
         QString IMG = QString::number(imageIndex) + ".png";
         QFile TMP(IMG);
         TMP.remove();
-    }
+    }*/
 }

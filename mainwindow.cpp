@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QDataStream>
 
-QString username="";
+QString username;
 QString ServerIP="127.0.0.1";
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -101,7 +101,19 @@ void MainWindow::onReadReady()
             ui->textEdit->insertPlainText(dataFull.mid(4));
         else if (pre == "IMG:")
         {
+            QString htmlTag = QString("<img src=\"%1\"></img>");
+            QString index = QString::number(imageIndex);
+            htmlTag = htmlTag.arg(index + ".png");
 
+            QFile file(index + ".png");
+            file.open(QIODevice::WriteOnly);
+            file.write(dataFull.mid(4));
+            file.close();
+
+            imageIndex++;
+
+            ui->textEdit->insertHtml(htmlTag);
+            qDebug() << "read:" << dataFull;
         }
     }while(sizeNow > 0);
 }
@@ -197,5 +209,50 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_actionTo_User_triggered()
 {
+    if(username=="")
+    {
+        Dialog a;
+        a.exec();
+        if(username=="")
+        {
+            ui->label_7->setText("您还没有登录，请先登录QAQ");
+        }
+        else
+        {
+            ui->label_7->setText("您好"+username+"欢迎使用Chat");
+        }
+        return;
+    }
+    QString image = QFileDialog::getOpenFileName(this,"选择一个图片文件",".","Image Files (*.gif *.png *.jpg *.bmp)");
+    if(image.isEmpty())
+        return;
+    qDebug()<<image;
+    QFile file(image);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = "IMG:" + file.readAll();
+    file.close();
 
+    //封装
+    QByteArray dataSend;
+
+    QDataStream stream(&dataSend,QIODevice::WriteOnly);
+    stream << (quint32)0 << data;
+    stream.device()->seek(0);
+    stream << dataSend.size();
+
+    tcpSocket.write(dataSend);
+
+    qDebug()<<dataSend;
+}
+
+void MainWindow::on_actiondelet_triggered()
+{
+    /*if(imageIndex==0)
+        return;
+    else for (int i=0;i<imageIndex;++i)
+    {
+        QString IMG = QString::number(imageIndex) + ".png";
+        QFile TMP(IMG);
+        TMP.remove();
+    }*/
 }

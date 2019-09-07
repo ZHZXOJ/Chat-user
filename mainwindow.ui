@@ -167,7 +167,6 @@
     </widget>
     <addaction name="menuChat_Record"/>
     <addaction name="menuUpload"/>
-    <addaction name="actiondelet"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
